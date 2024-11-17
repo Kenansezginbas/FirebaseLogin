@@ -14,12 +14,15 @@ class LoginVC: UIViewController {
     let errorMessage = SFLabel(text: "", color: .systemRed)
     
     var email: String? {
-        return loginView.emailTextField.text
+        return loginView.emailTextField.text?.lowercased()
     }
     
     var password: String? {
-        return loginView.passwordTextField.text
+        return loginView.passwordTextField.text?.lowercased()
     }
+    
+    let mockEmail = "key@hotmail.com"
+    let mockPassword = "123456"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +69,7 @@ extension LoginVC {
     }
     
     @objc func signInButtonTapped() {
-        print("Sign In Button Tapped")
-        login()
+       login()
         
     }
     
@@ -75,18 +77,21 @@ extension LoginVC {
         guard let email = email, let password = password else {
             return
         }
-        
+      
         if email.isEmpty || password.isEmpty {
             showErrorMessage(message: "Please enter your email and password")
-            return
-       }
-    
-        
-        
-        func showErrorMessage(message: String) {
-            errorMessage.text = message
-            errorMessage.isHidden = false
         }
         
+        if email == mockEmail && password == mockPassword {
+           let homeVC = HomeVC()
+            navigationController?.setViewControllers([homeVC], animated: true)
+        } else {
+            showErrorMessage(message: "Invalid email or password")
+        }
+    }
+    
+    func showErrorMessage(message: String) {
+        errorMessage.text = message
+        errorMessage.isHidden = false
     }
 }
